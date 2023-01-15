@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users 
+  devise_for :users
   
   get 'new_prototype', to: 'prototypes#new'
   post 'prototypes', to: 'prototypes#create'
