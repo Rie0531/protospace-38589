@@ -1,5 +1,7 @@
 class PrototypesController < ApplicationController
-  
+  # 繰り返し処理になったら下記を記述する
+  # before_action :set_prototype, only: [:show, 他の同処理のアクション名]
+
   def index
     @prototypes = Prototype.all
   end
@@ -15,6 +17,10 @@ class PrototypesController < ApplicationController
     else
       render :new
     end
+  end
+
+  def show
+    @prototype = Prototype.find(params[:id])
   end
  
 
