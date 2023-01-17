@@ -1,4 +1,7 @@
 class PrototypesController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show ]
+  before_action :producer_confirmation, only: [:edit]
+
   # 繰り返し処理になったら下記を記述する
   # before_action :set_prototype, only: [:show, 他の同処理のアクション名]
 
@@ -26,7 +29,10 @@ class PrototypesController < ApplicationController
   end
 
   def edit
-    @prototype = Prototype.find(params[:id])
+      @prototype = Prototype.find(params[:id])
+    unless user_signed_in?
+      move_to_index
+    end
   end
 
   def update
@@ -47,14 +53,20 @@ class PrototypesController < ApplicationController
     end
   end
 
-    
-
 
 
   private
 
   def prototype_params
     params.require(:prototype).permit(:title, :catch_copy, :concept, :image).merge(user_id: current_user.id)
+  end
+
+
+  def producer_confirmation
+    @prototype = Prototype.find(params[:id])
+    unless current_user == @prototype.user
+      redirect_to root_path
+    end
   end
 
 end
