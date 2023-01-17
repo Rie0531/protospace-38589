@@ -2,6 +2,7 @@ class PrototypesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show ]
   before_action :producer_confirmation, only: [:edit, :update, :destroy]
   before_action :set_prototype, only: [:show, :edit, :update, :destroy]
+
   
 
   def index
@@ -58,6 +59,7 @@ class PrototypesController < ApplicationController
 
 
   def producer_confirmation
+    @prototype = Prototype.find(params[:id])
     unless current_user == @prototype.user
       redirect_to root_path
     end
@@ -66,6 +68,5 @@ class PrototypesController < ApplicationController
   def set_prototype
     @prototype = Prototype.find(params[:id])
   end
-
 
 end
