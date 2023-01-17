@@ -1,9 +1,8 @@
 class PrototypesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show ]
-  before_action :producer_confirmation, only: [:edit]
-
-  # 繰り返し処理になったら下記を記述する
-  # before_action :set_prototype, only: [:show, 他の同処理のアクション名]
+  before_action :producer_confirmation, only: [:edit, :update, :destroy]
+  before_action :set_prototype, only: [:show, :edit, :update, :destroy]
+  
 
   def index
     @prototypes = Prototype.all
@@ -23,20 +22,17 @@ class PrototypesController < ApplicationController
   end
 
   def show
-    @prototype = Prototype.find(params[:id])
     @comment = Comment.new
     @comments = @prototype.comments
   end
 
   def edit
-      @prototype = Prototype.find(params[:id])
     unless user_signed_in?
       move_to_index
     end
   end
 
   def update
-    @prototype = Prototype.find(params[:id])
     if @prototype.update(prototype_params)
       redirect_to prototype_path(@prototype)
     else
@@ -45,7 +41,6 @@ class PrototypesController < ApplicationController
   end
  
   def destroy
-    @prototype = Prototype.find(params[:id])
     if @prototype.destroy
       redirect_to root_path
     else
@@ -63,10 +58,14 @@ class PrototypesController < ApplicationController
 
 
   def producer_confirmation
-    @prototype = Prototype.find(params[:id])
     unless current_user == @prototype.user
       redirect_to root_path
     end
   end
+
+  def set_prototype
+    @prototype = Prototype.find(params[:id])
+  end
+
 
 end
