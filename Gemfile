@@ -61,3 +61,7 @@ gem 'image_processing', '~> 1.2'
 group :development, :test do
   gem 'pry-rails'
 end
+
+group :production do
+  gem 'pg'
+end
